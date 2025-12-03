@@ -66,7 +66,8 @@
     {"title": "没有狙怎么你了，，，", "content": "使用摩步专精，携带GRU AA和伏击小队，且不得携带任何狙击手", "author": "大大的鸟"},
     {"title": "阿富汗战争", "content": "使用空特专精，只能携带武装无人机和狙击手，且武装无人机必须有且只有对地打击挂载", "author": "大大的鸟"},
     {"title": "信息战", "content": "无人机数量大于等于4", "author": "千年夜雨"},
-    {"title": "强壮的狙", "content": "所有侦察兵必须拥有反甲能力", "author": "Zola"}
+    {"title": "强壮的狙", "content": "所有侦察兵必须拥有反甲能力", "author": "Zola"},
+    {"title": "要饭", "content": "求求你给我一个三连吧", "author": "云洁"}
   ],
   "infantry": [
     {"title": "垃圾海", "content": "所有携带的步战车价格不能超过100分", "author": "塞德利茨"},
@@ -230,6 +231,7 @@
     {"title": "Never Gonna Give You Up", "content": "使用空特卡组，同时携带未装备核武器的B-1B和B-2；并携带2架仅装备2发7000m及以上射程空空导弹的F-22", "author": "塞德里茨"}
   ]
 }
+
 
 
 
