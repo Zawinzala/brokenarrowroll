@@ -434,7 +434,7 @@
             </div>
 
             <div class="config-section">
-                <div class="config-section-title">全局 Debuff</div>
+                <div class="config-section-title">本队 Debuff</div>
                 <div class="setting-group">
                     <span>Roll:</span>
                     <select id="debuffRollSelect">
@@ -731,7 +731,7 @@
 
             ['a', 'b'].forEach(t => {
                 document.getElementById(`label-${t}-buff`).textContent = `全局 Buff (${br}选${bp})`;
-                document.getElementById(`label-${t}-debuff`).textContent = `全局 Debuff (${dr}选${dp})`;
+                document.getElementById(`label-${t}-debuff`).textContent = `本队 Debuff (${dr}选${dp})`;
             });
 
             // 按钮不再消失，变成“重新抽取”
@@ -1099,4 +1099,5 @@
     </script>
 </body>
 </html>
+
 
