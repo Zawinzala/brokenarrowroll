@@ -33,7 +33,9 @@
     {"title": "特别军事行动", "content": "本局地图为里加机场或契卡洛夫斯克空军基地", "author": "千年夜雨"},
     {"title": "good morning，越南", "content": "本局地图为鲁达森林或蜿蜒之河", "author": "千年夜雨"},
     {"title": "史密斯专员", "content": "本局游戏初始资源为0pt", "author": "纹眉山羊"},
-    {"title": "经济特区", "content": "双方起始资源1200，收入350，维护费2，占点收益150", "author": "zola2"}
+    {"title": "经济特区", "content": "双方起始资源1200，收入350，维护费2，占点收益150", "author": "zola2"},
+    {"title": "合作模式", "content": "双方每队选一人只能带侦察栏、支援栏、直升机栏。其他人不能带任何侦察栏、支援栏。最优先级覆盖", "author": "zola"},
+    {"title": "无线电静默", "content": "双方每队都需要10架以上有sead导弹的单位", "author": "zola"}
   ],
   "team_debuffs": [
     {"title": "不许当蛆！", "content": "本方指定一人的支援栏不可用", "author": "曾经是暴白的暴黑"},
@@ -73,6 +75,8 @@
     {"title": "天气晴朗", "content": "本方所有人禁止携带台风小车、风暴导弹车、冰雹和龙卷风火箭炮", "author": "86"},
     {"title": "狂风暴雨", "content": "本方所有人禁止携带拥有两栖能力的载具", "author": "86"},
     {"title": "lord?kord!!!", "content": "本方所有人共需装备超过28具kord HMG", "author": "86"},
+    {"title": "我躲起来啦", "content": "本方只能出隐身飞机，，，如果同时选择【可见度良好】则融合为：【毁灭吧】：本方飞机只能出核弹飞机", "author": "Zola"},
+    {"title": "可见度良好", "content": "本方只能出非隐身飞机，，，如果同时选择【我躲起来啦】则融合为：【毁灭吧】：本方飞机只能出核弹飞机", "author": "Zola"},
     {"title": "老干妈爱好者", "content": "本方所有人共需装备超过36具M2重机枪", "author": "曾经是暴白的暴黑"}
   ],
   "recon": [
@@ -94,7 +98,9 @@
     {"title": "顺手的事", "content": "携带装备12.7mm口径反器材狙击枪的狙击手", "author": "千年夜雨"},
     {"title": "鱼人夜行者", "content": "使用海部专精，携带4队PDSS", "author": "86"},
     {"title": "海摩爱好者", "content": "使用海部专精，至少携带6辆升级了瓜园-U炮塔的BTR90M", "author": "???"},
-    {"title": "我说中门对狙你耳朵聋吗", "content": "使用海部专精，携带4队升级为火力支援小组的VMF", "author": "曾经是暴白的暴黑"}
+    {"title": "我说中门对狙你耳朵聋吗", "content": "使用海部专精，携带4队升级为火力支援小组的VMF", "author": "曾经是暴白的暴黑"},
+    {"title": "强壮的狙", "content": "所有侦察兵必须拥有反甲能力", "author": "Zola"},
+    {"title": "要饭", "content": "求求你给我一个三连吧", "author": "云洁"}
   ],
   "infantry": [
     {"title": "垃圾海", "content": "所有携带的步战车价格不能超过100分", "author": "塞德利茨"},
@@ -110,7 +116,7 @@
     {"title": "空投手令", "content": "至少携带6队架设单位", "author": "MIe"},
     {"title": "哔哔打车", "content": "携带的所有步战车不能低于80速", "author": "Azure"},
     {"title": "闪电战", "content": "只能携带轮式步战车", "author": "千年夜雨"},
-    {"title": "鲍黑的祝福", "content": "禁止携带任何运兵车（可以携带步战车）", "author": "三分糖"},
+    {"title": "鲍黑的祝福", "content": "禁止携带任何正面小于30抗破的车）", "author": "三分糖"},
     {"title": "阿甘快跑！", "content": "该卡没有任何限制，祝你好运", "author": "grc"},
     {"title": "削减军费", "content": "携带的步兵无法进行花费点数的升级", "author": "MIe"},
     {"title": "奏拉之神的庇护", "content": "使用斯崔克专精，其中斯崔克专精的步兵只能携带troopers和troopers AA", "author": "谁啊我真服了"},
