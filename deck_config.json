@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "version": "1.0",
+    "version": "1.1",
     "last_updated": "2025-12-05",
     "author": "Zola & all",
     "signature": "SHA256:deck_v1_official"
@@ -287,3 +287,4 @@
     {"title": "多功能战机", "content": "携带的所有飞机必须同时拥有对空导弹和对地武器", "author": "zola2"}
   ]
 }
+
