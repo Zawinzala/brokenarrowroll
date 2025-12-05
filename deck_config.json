@@ -37,7 +37,9 @@
     {"title": "合作模式", "content": "双方每队选一人只能带侦察栏、支援栏、直升机栏。其他人不能带任何侦察栏、支援栏。最优先级覆盖", "author": "zola"},
     {"title": "无线电静默", "content": "双方每队都需要[2*每队人数]架以上有sead导弹的单位", "author": "zola"},
     {"title": "蜜雪禁区", "content": "重新组队，离上海最近的玩家组一队，离上海最远的玩家组一队", "author": "zola"},
-    {"title": "别说俄语", "content": "只有说出6句以上俄语的人才能玩俄联邦", "author": "zola"}
+    {"title": "别说俄语", "content": "只有说出6句以上俄语的人才能玩俄联邦", "author": "zola"},
+    {"title": "复杂电磁环境", "content": "本局语音不能分房", "author": "zola"},
+    {"title": "性压抑", "content": "每队投票一个人，必须每句话后边都带[喵]", "author": "zola"}
   ],
   "team_debuffs": [
     {"title": "不许当蛆！", "content": "本方指定一人的支援栏不可用", "author": "曾经是暴白的暴黑"},
@@ -289,6 +291,7 @@
     {"title": "多功能战机", "content": "携带的所有飞机必须同时拥有对空导弹和对地武器", "author": "zola2"}
   ]
 }
+
 
 
 
