@@ -1,10 +1,10 @@
 # 断箭卡组的神人肉鸽
 
-一个基于网页的卡组构建 Roguelike
+一个基于网页的卡组构建 Roguelike 工具
 
 ## 在线游玩
 
-游戏已部署至 GitHub Pages，可直接在线游玩：
+工具已部署至 GitHub Pages，可直接在线游玩：
 [https://zawinzala.github.io/brokenarrowroll/](https://zawinzala.github.io/brokenarrowroll/)
 
 ## 贡献指南
