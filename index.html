@@ -2,238 +2,315 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>断箭神人卡组肉鸽 by Zola</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Core Palette */
+            --bg-core: #050505;
             --bg-dark: #0b0c10;
-            --bg-panel: #1f2833;
-            --text-main: #c5c6c7;
+            --bg-panel: rgba(31, 40, 51, 0.6);
+            --bg-card: #141619;
+            
+            /* Accents */
+            --text-main: #e0e0e0;
+            --text-sub: #a0a0a0;
             --text-highlight: #66fcf1;
+            --border-color: rgba(102, 252, 241, 0.15);
             
+            /* Teams */
             --team-a-main: #ff4757;
-            --team-a-dark: rgba(255, 71, 87, 0.1);
-            
+            --team-a-glow: rgba(255, 71, 87, 0.4);
             --team-b-main: #2ed573;
-            --team-b-dark: rgba(46, 213, 115, 0.1);
+            --team-b-glow: rgba(46, 213, 115, 0.4);
             
-            --gold: #ffd32a;
+            /* Effects */
+            --gold: #ffa502;
             --purple: #a55eea; 
-            --card-width: 140px;
-
+            --glass: rgba(11, 12, 16, 0.85);
+            --shadow-card: 0 4px 6px rgba(0,0,0,0.3);
+            
             /* Tag Colors */
-            --tag-recon: #f1c40f;    /* Yellow */
-            --tag-infantry: #e17055; /* Terracotta */
-            --tag-tank: #ff7675;     /* Red */
-            --tag-support: #0984e3;  /* Blue */
-            --tag-helo: #00cec9;     /* Teal */
-            --tag-air: #a29bfe;      /* Purple */
+            --tag-recon: #f1c40f;    
+            --tag-infantry: #e17055; 
+            --tag-tank: #ff6b81;     
+            --tag-support: #0984e3;  
+            --tag-helo: #00cec9;     
+            --tag-air: #a29bfe;      
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; outline: none; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-core); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-highlight); }
 
         body {
             font-family: 'Noto Sans SC', 'Rajdhani', sans-serif;
-            background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at 50% 0%, #1c2331 0%, #0b0c10 70%);
+            background-color: var(--bg-core);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(102, 252, 241, 0.03) 0%, transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(255, 71, 87, 0.03) 0%, transparent 25%);
             color: var(--text-main);
             margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
+            padding-bottom: 40px;
         }
 
-        /* --- Header (Title Only) --- */
-        .title-header {
+        /* --- Modern Header --- */
+        .header-wrapper {
             width: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, transparent 100%);
+            padding: 20px 0 10px;
             display: flex;
-            justify-content: center;
-            padding: 20px 0 15px 0;
-            background: transparent;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
         h1 {
             font-family: 'Rajdhani', sans-serif;
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 4vw, 3rem); /* Responsive Font Size */
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 4px;
+            letter-spacing: 6px;
             margin: 0;
             background: linear-gradient(90deg, var(--team-a-main), #fff, var(--team-b-main));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 20px rgba(255,255,255,0.1);
+            text-shadow: 0 0 30px rgba(255,255,255,0.15);
             text-align: center;
+            line-height: 1.2;
         }
 
-        /* --- Sticky Control Bar --- */
-        /* 关键修改：它是body的直接子元素，top:0 即可完美吸顶 */
+        #meta-info {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            font-family: 'Rajdhani', monospace;
+            opacity: 0.7;
+        }
+
+        /* --- Utility Bar (Top Buttons) --- */
+        .top-utilities {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* --- Sticky Control Bar (Command Center) --- */
         .control-bar {
             width: 100%;
-            background: rgba(11, 12, 16, 0.95); /* 深色半透明背景 */
-            backdrop-filter: blur(15px);        /* 毛玻璃效果 */
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(102, 252, 241, 0.3);
-            padding: 12px 20px;
+            max-width: 1400px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 20px;
+            margin: 0 auto 20px auto;
             display: flex;
             gap: 20px;
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
-            
-            position: sticky; /* 吸顶核心属性 */
-            top: 0;           /* 距离顶部0像素时吸附 */
-            z-index: 1000;    /* 保证在最上层 */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         .config-section {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             padding-right: 15px;
             border-right: 1px solid rgba(255,255,255,0.1);
         }
-        .config-section:last-child { border-right: none; }
+        .config-section:last-child { border-right: none; padding-right: 0; }
+        
         .config-section-title {
-            font-size: 0.75rem;
-            color: #66fcf1;
+            font-size: 0.8rem;
+            color: var(--text-highlight);
             text-transform: uppercase;
-            font-weight: bold;
-            margin-right: 5px;
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         .setting-group {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             font-size: 0.85rem;
-            color: #aaa;
-            background: rgba(255,255,255,0.05);
+            color: #ccc;
+            background: rgba(0,0,0,0.2);
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 6px;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
         select {
             background: #0b0c10;
             color: white;
-            border: 1px solid #45a29e;
-            padding: 3px 6px;
+            border: 1px solid #333;
+            padding: 4px 8px;
             border-radius: 4px;
             cursor: pointer;
-            font-family: 'Rajdhani';
+            font-family: 'Rajdhani', sans-serif;
             font-weight: bold;
+            transition: all 0.2s;
         }
+        select:hover, select:focus { border-color: var(--text-highlight); }
 
+        /* Integrated Status Display */
+        .status-display {
+            flex: 1;
+            text-align: center;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-highlight);
+            font-weight: 600;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(102, 252, 241, 0.1);
+            border-radius: 4px;
+            padding: 8px 15px;
+            min-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            text-shadow: 0 0 5px rgba(102, 252, 241, 0.3);
+        }
+        .status-display.alert { color: var(--gold); border-color: rgba(255, 165, 2, 0.3); text-shadow: 0 0 5px rgba(255, 165, 2, 0.3); }
+
+        /* Buttons */
         .btn {
-            padding: 8px 20px;
+            padding: 8px 20px; /* Slightly smaller padding for navbar fit */
             border: none;
             border-radius: 6px;
             font-family: 'Rajdhani', sans-serif;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             color: #0b0c10;
             white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            height: 38px;
         }
-        
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(1); }
-        .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.5); filter: brightness(1.1); }
+        .btn:active { transform: translateY(0); }
 
-        .btn-upload { background: #4b6584; color: white; }
-        .btn-blue { background: linear-gradient(135deg, #45a29e, #66fcf1); }
-        .btn-gold { background: var(--gold); box-shadow: 0 0 15px rgba(255, 211, 42, 0.3); }
-        .btn-red { background: linear-gradient(135deg, #ff4757, #ff6b81); color: white; }
+        .btn-upload { background: #34495e; color: #ecf0f1; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-blue { background: linear-gradient(135deg, #2c3e50, #45a29e); color: white; border: 1px solid #45a29e; }
+        .btn-gold { background: linear-gradient(135deg, #f1c40f, #ff9f43); color: #2d3436; }
+        .btn-red { background: linear-gradient(135deg, #c0392b, #ff4757); color: white; }
 
-        #status-bar {
+        /* --- Game Container & Layout --- */
+        .page-container {
             width: 100%;
-            text-align: center;
-            padding: 8px 0;
-            background: rgba(0,0,0,0.3);
-            font-size: 0.95rem;
-            color: #66fcf1;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* --- Phase Containers --- */
-        .game-content-wrapper {
-            width: 100%;
+            max-width: 1600px;
+            padding: 0 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            flex: 1;
+            gap: 30px;
         }
 
         .game-phase {
-            width: 100%;
-            max-width: 1800px;
             display: none; 
             flex-direction: column;
-            gap: 20px;
+            gap: 40px;
+            animation: fadeIn 0.5s ease-out;
         }
-        .game-phase.active { display: flex; animation: slideUpFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .game-phase.active { display: flex; }
 
-        @keyframes slideUpFade { 
-            from { opacity: 0; transform: translateY(30px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Global Board --- */
+        /* --- Global Board (Phase 1) --- */
         .global-board {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
             width: 100%;
         }
 
         .global-team-panel {
-            background: rgba(255,255,255,0.03);
+            background: var(--bg-panel);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
         }
-        .global-team-panel.a { border-top: 4px solid var(--team-a-main); }
-        .global-team-panel.b { border-top: 4px solid var(--team-b-main); }
+        .global-team-panel::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        }
+        .global-team-panel.a::before { background: var(--team-a-main); box-shadow: 0 0 15px var(--team-a-main); }
+        .global-team-panel.b::before { background: var(--team-b-main); box-shadow: 0 0 15px var(--team-b-main); }
 
         .global-section-title {
             font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 15px;
+            font-weight: 700;
+            margin: 20px 0 15px 0;
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
-            color: #eee;
-        }
-
-        .global-cards-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            min-height: 90px;
+            padding-bottom: 8px;
+            color: var(--text-main);
+            letter-spacing: 1px;
         }
 
         .req-badge {
             font-size: 0.8rem;
-            padding: 2px 8px;
-            border-radius: 4px;
-            background: #2d3436;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
         }
-        .req-badge.valid { background: var(--gold); color: #000; font-weight: bold; }
+        .req-badge.valid { background: var(--gold); color: #000; border-color: var(--gold); box-shadow: 0 0 10px rgba(255, 165, 2, 0.4); }
 
-        /* --- Arena --- */
+        /* --- Card Grid System --- */
+        .global-cards-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            min-height: 100px;
+            padding: 5px;
+        }
+        
+        /* 
+           Fixed for Requirement 4 & 2: 
+           Allows 5 cards to fit on one line on desktop by reducing min-width slightly and reducing gap.
+           Font size remains unchanged.
+        */
+        .hand-container {
+            display: grid;
+            /* 120px is small enough to fit 5 in ~650px width, large enough for text */
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            gap: 10px; 
+            padding: 10px;
+            flex: 1;
+        }
+
+        /* --- Arena (Phase 2) --- */
         .arena {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -241,118 +318,121 @@
             width: 100%;
         }
 
-        .team-col { display: flex; flex-direction: column; gap: 15px; }
         .team-header {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 900;
             text-transform: uppercase;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
             border-bottom: 2px solid;
+            margin-bottom: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            letter-spacing: 2px;
         }
         
-        .team-a .team-header { color: var(--team-a-main); border-color: var(--team-a-main); }
-        .team-b .team-header { color: var(--team-b-main); border-color: var(--team-b-main); flex-direction: row-reverse; }
+        .team-a .team-header { color: var(--team-a-main); border-color: var(--team-a-main); justify-content: flex-start; text-shadow: 0 0 15px rgba(255, 71, 87, 0.3); }
+        .team-b .team-header { color: var(--team-b-main); border-color: var(--team-b-main); justify-content: flex-end; text-shadow: 0 0 15px rgba(46, 213, 115, 0.3); }
 
         .player-panel {
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
-            display: flex;
-            align-items: stretch;
-            min-height: 110px;
-            position: relative;
+            background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
             border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+            transition: border-color 0.3s;
         }
+        .player-panel:hover { border-color: rgba(255,255,255,0.15); }
 
-        .team-a .player-panel { border-left: 4px solid var(--team-a-main); background: linear-gradient(90deg, var(--team-a-dark), transparent); }
-        .team-b .player-panel { border-right: 4px solid var(--team-b-main); background: linear-gradient(-90deg, var(--team-b-dark), transparent); flex-direction: row-reverse; }
+        .team-a .player-panel { border-left: 4px solid var(--team-a-main); }
+        .team-b .player-panel { border-right: 4px solid var(--team-b-main); flex-direction: row-reverse; }
 
         .player-meta {
-            width: 70px;
+            width: 90px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.25);
             flex-shrink: 0;
-            z-index: 2;
+            padding: 10px;
         }
-        .player-id { font-size: 1.2rem; font-weight: 800; font-family: 'Rajdhani'; }
+        
+        .team-a .player-meta { border-radius: 8px 0 0 8px; border-right: 1px solid rgba(255,255,255,0.05); }
+        .team-b .player-meta { border-radius: 0 8px 8px 0; border-left: 1px solid rgba(255,255,255,0.05); }
+
+        .player-id { font-size: 1.4rem; font-weight: 800; font-family: 'Rajdhani'; color: #fff; }
 
         /* AI Name Tag */
         .ai-combo-name {
             position: absolute;
-            top: -16px; left: 80px; z-index: 10;
-            background: #0b0c10; padding: 2px 12px;
+            top: -12px; left: 100px; z-index: 10;
+            background: #000; padding: 2px 12px;
             border: 1px solid; border-radius: 4px;
-            font-size: 1rem; font-weight: 900; font-style: italic;
+            font-size: 0.85rem; font-weight: 900; font-style: italic;
             text-transform: uppercase; white-space: nowrap;
-            box-shadow: 0 0 10px rgba(0,0,0,0.8);
-            transform: skewX(-10deg); opacity: 0; display: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+            opacity: 0; display: none;
+            pointer-events: none;
         }
-        .team-a .ai-combo-name { color: #ffd1f9; border-color: #ff9ff3; box-shadow: 0 0 10px rgba(255, 71, 87, 0.5); }
-        .team-b .ai-combo-name { left: auto; right: 80px; color: #7bed9f; border-color: #7bed9f; box-shadow: 0 0 10px rgba(46, 213, 115, 0.5); transform: skewX(10deg); }
-        .ai-combo-name.active { display: block; animation: glitch-enter 0.6s forwards; }
+        .team-b .ai-combo-name { left: auto; right: 100px; }
+        .team-a .ai-combo-name { color: var(--team-a-main); border-color: var(--team-a-main); }
+        .team-b .ai-combo-name { color: var(--team-b-main); border-color: var(--team-b-main); }
+        .ai-combo-name.active { display: block; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.5) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
 
-        @keyframes glitch-enter {
-            0% { opacity: 0; transform: scale(2) skewX(-10deg); filter: blur(10px); }
-            100% { opacity: 1; transform: scale(1) skewX(-10deg); filter: blur(0); }
-        }
-
-        .pick-counter { margin-top: 5px; font-size: 0.7rem; padding: 2px 4px; border-radius: 3px; background: #333; color: #888; }
-        .pick-counter.done { color: var(--gold); border: 1px solid var(--gold); background: transparent; font-weight: bold;}
-
-        .hand-container {
-            flex: 1; display: flex; align-items: center; padding: 8px 12px; gap: 10px; flex-wrap: wrap;
-        }
-        .team-b .hand-container { justify-content: flex-end; }
+        .pick-counter { margin-top: 8px; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; background: #222; color: #777; font-weight: 600; }
+        .pick-counter.done { color: #000; background: var(--gold); box-shadow: 0 0 8px rgba(255, 165, 2, 0.5); }
 
         /* --- Cards --- */
         .card {
-            width: var(--card-width); height: 90px;
-            background: #252a34; border: 1px solid #393e46; border-radius: 6px;
-            padding: 8px; cursor: pointer; position: relative;
-            display: flex; flex-direction: column; overflow: hidden;
-            
-            opacity: 0; transform: translateY(20px) scale(0.95);
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s, background-color 0.2s;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 110px; /* Base height */
+            transition: all 0.25s ease;
+            overflow: hidden;
         }
-        .card.dealt {
-            opacity: 1; transform: translateY(0) scale(1);
-            transition: opacity 0.4s ease-out, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--text-highlight);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            background: #1e2126;
+            z-index: 2;
         }
-        .card:hover { transform: translateY(-6px) scale(1.02) !important; border-color: #66fcf1; z-index: 5; background: #2d3436; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .card.selected { border: 2px solid var(--gold); background: #2c2c2c; box-shadow: 0 0 15px rgba(255, 211, 42, 0.3); transform: translateY(-2px) scale(1.05) !important; }
+
+        .card.selected {
+            border: 2px solid var(--gold);
+            background: #252525;
+            box-shadow: 0 0 20px rgba(255, 211, 42, 0.2);
+            transform: translateY(-2px);
+        }
         
         .card.type-buff { border-top: 3px solid var(--gold); }
         .card.type-debuff { border-top: 3px solid var(--purple); }
-        .card.type-unit { border-top: 3px solid #66fcf1; }
+        .card.type-unit { border-top: 3px solid var(--text-highlight); }
 
-        .card-title { font-size: 0.8rem; font-weight: bold; color: #fff; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-desc { 
-            font-size: 0.65rem; 
-            color: #a4b0be; 
-            line-height: 1.2; 
-            overflow: hidden; 
-            display: -webkit-box; 
-            -webkit-line-clamp: 3; 
-            line-clamp: 3; 
-            -webkit-box-orient: vertical; 
+        .card-title {
+            font-size: 0.85rem; font-weight: 700; color: #fff;
+            margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .card-desc {
+            font-size: 0.7rem; color: #999; line-height: 1.3;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
         }
         
-        /* Neon Tags */
-        .card-tag { 
-            position: absolute; bottom: 4px; right: 5px; 
-            font-size: 0.75rem; 
-            font-weight: 900; 
-            text-transform: uppercase;
-            text-shadow: 0 0 8px currentColor; 
-            opacity: 1; 
-            letter-spacing: 1px;
+        /* Neon Tags on Card */
+        .card-tag {
+            position: absolute; bottom: 6px; right: 8px;
+            font-size: 0.65rem; font-weight: 900; text-transform: uppercase;
+            opacity: 0.8; letter-spacing: 0.5px;
         }
-        
         .tag-recon { color: var(--tag-recon); }
         .tag-infantry { color: var(--tag-infantry); }
         .tag-tank { color: var(--tag-tank); }
@@ -360,40 +440,88 @@
         .tag-helo { color: var(--tag-helo); }
         .tag-air { color: var(--tag-air); }
 
-
-        /* --- Showdown --- */
-        .mode-showdown .card:not(.selected) { display: none; }
-        .mode-showdown .global-cards-row .card:not(.selected) { display: none; }
-        .mode-showdown .card.selected { width: 100%; height: auto; min-height: 90px; cursor: default; transform: none !important; background: #1f2833; animation: none; }
-        .mode-showdown .hand-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; width: 100%; }
-        .mode-showdown #phase-global { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px dashed rgba(255,255,255,0.1); }
-        .mode-showdown .global-board { grid-template-columns: 1fr 1fr; gap: 20px; }
-        .mode-showdown .req-badge { display: none; }
-        .mode-showdown .global-cards-row { justify-content: center; }
-
         /* --- Tooltip --- */
         #tooltip {
-            position: fixed; background: rgba(15, 18, 25, 0.98); border: 1px solid #45a29e;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.9); padding: 15px; border-radius: 8px; width: 300px;
+            position: fixed; background: rgba(15, 18, 25, 0.98); border: 1px solid var(--text-highlight);
+            box-shadow: 0 15px 40px rgba(0,0,0,1); padding: 15px; border-radius: 8px; width: 320px;
             pointer-events: none; opacity: 0; transform: scale(0.95); z-index: 9999; color: #fff;
             transition: opacity 0.15s ease, transform 0.15s ease;
         }
         #tooltip.visible { opacity: 1; transform: scale(1); }
-        #tooltip h4 { margin: 0 0 8px 0; color: #66fcf1; border-bottom: 1px solid #333; padding-bottom: 6px; font-size: 1rem; }
-        #tooltip p { margin: 0 0 10px 0; font-size: 0.9rem; color: #dcdcdc; line-height: 1.5; }
-        .tooltip-author { text-align: right; font-size: 0.75rem; color: var(--gold); font-style: italic; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 5px; opacity: 0.8; }
+        #tooltip h4 { margin: 0 0 10px 0; color: var(--text-highlight); border-bottom: 1px solid #333; padding-bottom: 8px; font-size: 1.1rem; }
+        #tooltip p { margin: 0 0 12px 0; font-size: 0.95rem; color: #dcdcdc; line-height: 1.5; }
+        .tooltip-author { text-align: right; font-size: 0.8rem; color: var(--gold); font-style: italic; opacity: 0.8; }
 
         input[type="file"] { display: none; }
 
-        @media (max-width: 1300px) {
-            .global-board { grid-template-columns: 1fr; }
-            .arena { grid-template-columns: 1fr; gap: 30px; }
-            .team-b .player-panel { flex-direction: row; border-right: none; border-left: 4px solid var(--team-b-main); background: linear-gradient(90deg, var(--team-b-dark), transparent); }
-            .team-b .team-header { flex-direction: row; }
-            .team-b .hand-container { justify-content: flex-start; }
-            .control-bar { gap: 10px; padding: 10px; }
-            .config-section { border: none; padding-right: 0; }
+        /* --- Side Search --- */
+        .side-search-button {
+            position: fixed; left: 20px; bottom: 20px; z-index: 1200;
+            background: linear-gradient(135deg, var(--text-highlight), #2ed573);
+            color: #0b0c10; width: 50px; height: 50px;
+            border-radius: 50%; border: none; font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(102, 252, 241, 0.4);
+            cursor: pointer; transition: transform 0.2s;
+            display: flex; align-items: center; justify-content: center;
         }
+        .side-search-button:hover { transform: scale(1.1) rotate(15deg); }
+
+        .search-panel {
+            position: fixed; left: 20px; bottom: 80px; width: 360px; max-height: 60vh;
+            background: rgba(11, 12, 16, 0.95); border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px); border-radius: 12px; padding: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8); z-index: 1600;
+            display: flex; flex-direction: column; gap: 10px;
+            transform: translateX(-120%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-panel.active { transform: translateX(0); }
+        .search-panel input {
+            width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #333;
+            background: rgba(0,0,0,0.3); color: white;
+        }
+        .search-result {
+            padding: 10px; background: rgba(255,255,255,0.03); border-radius: 6px;
+            border: 1px solid transparent; cursor: pointer; transition: 0.2s;
+            position: relative;
+        }
+        .search-result:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+        .search-results-container { overflow-y: auto; max-height: 400px; display: flex; flex-direction: column; gap: 8px; }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 960px) {
+            .arena { grid-template-columns: 1fr; gap: 20px; }
+            .team-b .player-panel { flex-direction: row; border-right: none; border-left: 4px solid var(--team-b-main); }
+            .team-b .player-meta { border-radius: 8px 0 0 8px; border-left: none; border-right: 1px solid rgba(255,255,255,0.05); }
+            .team-b .team-header { flex-direction: row; justify-content: flex-start; }
+            .ai-combo-name { left: 100px; right: auto; }
+            .global-board { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .control-bar { flex-direction: column; align-items: stretch; gap: 15px; padding: 15px; }
+            .config-section { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; padding-right: 0; width: 100%; justify-content: space-between; }
+            .config-section:last-child { border-bottom: none; }
+            .player-panel { flex-direction: column; }
+            .player-meta { width: 100%; flex-direction: row; justify-content: space-between; border-radius: 8px 8px 0 0; padding: 5px 15px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .card { height: 100px; }
+            .side-search-button { bottom: 10px; left: auto; right: 10px; }
+            .search-panel { left: 10px; right: 10px; bottom: 70px; width: auto; }
+            /* Mobile fallback for hand */
+            .hand-container { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .status-display { min-width: auto; margin-top: 5px; }
+        }
+
+        /* --- Showdown Mode Overrides --- */
+        .mode-showdown .card:not(.selected) { display: none !important; }
+        .mode-showdown .global-cards-row .card:not(.selected) { display: none !important; }
+        .mode-showdown .card.selected { 
+            width: 100%; height: auto; min-height: 120px; transform: none !important; cursor: default;
+            grid-column: span 1; 
+        }
+        .mode-showdown .global-cards-row, .mode-showdown .hand-container { 
+            display: flex; flex-wrap: wrap; gap: 15px; 
+        }
+        .mode-showdown .card.selected { flex: 1 1 200px; }
     </style>
 </head>
 <body>
@@ -404,125 +532,136 @@
         <div class="tooltip-author">Author</div>
     </div>
 
-    <div class="title-header">
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <h1>断箭神人卡组肉鸽 by Zola</h1>
-            <!-- 新增：版本和更新时间显示在标题下方 -->
-            <div id="meta-info" style="display:none; text-align:center; font-size:0.8rem; color:#66fcf1; margin-top:6px; font-family:'Rajdhani', sans-serif; letter-spacing:1px;">
-                <!-- 内容由 JS 填充 -->
-            </div>
-        </div>
+    <!-- Header Section -->
+    <div class="header-wrapper">
+        <h1>断箭神人卡组肉鸽 by zola</h1>
+        <div id="meta-info">DATA VERSION: WAITING FOR LOAD...</div>
     </div>
 
-    <div class="control-bar">
-        <label class="btn btn-upload">
-            📂 加载 JSON
-            <input type="file" id="fileInput" accept=".json">
-        </label>
+    <div class="page-container">
+        
+        <!-- Utility Buttons -->
+        <div class="top-utilities" id="top-utilities">
+            <label class="btn btn-upload">
+                <span style="font-size: 1.2em;">📂</span> 加载 JSON
+                <input type="file" id="fileInput" accept=".json">
+            </label>
 
-        <a href="https://github.com/Zawinzala/brokenarrowroll" target="_blank" class="btn btn-upload" style="background: #24292e; color: white;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.087-.744.084-.689.084-.689 1.205.084 1.839 1.237 1.839 1.237 1.07 1.836 2.809 1.305 3.495.998.108-.77.419-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.118-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.8.576 4.757-1.589 8.199-6.086 8.199-11.385 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            GitHub 源码
-        </a>
+            <a href="https://github.com/Zawinzala/brokenarrowroll" target="_blank" class="btn btn-upload" style="background: #24292e;">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.6.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.087-.744.084-.689.084-.689 1.205.084 1.839 1.237 1.839 1.237 1.07 1.836 2.809 1.305 3.495.998.108-.77.419-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.118-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.652.242 2.873.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.8.576 4.757-1.589 8.199-6.086 8.199-11.385 0-6.627-5.373-12-12-12z"/></svg>
+                GitHub 源码
+            </a>
 
-        <div id="global-controls" style="display:none; gap:15px; align-items:center;">
-            <div class="config-section">
-                <div class="config-section-title">全局 Buff</div>
-                <div class="setting-group">
-                    <span>Roll:</span>
-                    <select id="buffRollSelect">
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <span>Pick:</span>
-                    <select id="buffPickSelect">
-                        <option value="1" selected>1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="config-section">
-                <div class="config-section-title">本队 Debuff</div>
-                <div class="setting-group">
-                    <span>Roll:</span>
-                    <select id="debuffRollSelect">
-                        <option value="2">2</option>
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <span>Pick:</span>
-                    <select id="debuffPickSelect">
-                        <option value="1">1</option>
-                        <option value="2" selected>2</option>
-                    </select>
-                </div>
-            </div>
-
-            <button class="btn btn-blue btn-phase" id="btn-start-global" style="display:flex;">1️⃣ 抽取全局词条</button>
+            <button class="btn btn-upload" id="btn-feedback">📧 反馈词条</button>
+            <button class="btn btn-red" id="btn-restart" style="display:none;">🔄 重新开始</button>
         </div>
 
-        <button class="btn btn-gold btn-phase" id="btn-confirm-global" style="display:none;">✅ 确认进入第二阶段</button>
-
-        <div id="unit-controls" style="display:none; gap:15px; align-items:center;">
-            <div class="config-section">
-                <div class="config-section-title">对战设置</div>
-                <div class="setting-group">
-                    <span>对战人数:</span>
-                    <select id="playerCountSelect">
-                        <option value="1">1v1</option>
-                        <option value="2">2v2</option>
-                        <option value="3">3v3</option>
-                        <option value="4">4v4</option>
-                        <option value="5" selected>5v5</option>
-                    </select>
+        <!-- Sticky Control Bar -->
+        <div class="control-bar" role="navigation">
+            <!-- Global Phase Controls -->
+            <div id="global-controls" style="display:none; gap:15px; align-items:center; flex-wrap:wrap; width:100%;">
+                <div class="config-section">
+                    <div class="config-section-title">全局 Buff</div>
+                    <div class="setting-group">
+                        <span>Roll:</span>
+                        <select id="buffRollSelect">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <span>Pick:</span>
+                        <select id="buffPickSelect">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
                 </div>
+
+                <div class="config-section">
+                    <div class="config-section-title">本队 Debuff</div>
+                    <div class="setting-group">
+                        <span>Roll:</span>
+                        <select id="debuffRollSelect">
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div class="setting-group">
+                        <span>Pick:</span>
+                        <select id="debuffPickSelect">
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Fixed: Phase 1 Button logic inside the container -->
+                <div style="flex:1;"></div> 
+                <button class="btn btn-blue btn-phase" id="btn-start-global" style="display:flex;">1️⃣ 抽取全局</button>
+                <button class="btn btn-gold btn-phase" id="btn-confirm-global" style="display:none;">✅ 进入阶段二</button>
             </div>
 
-            <div class="config-section">
-                <div class="config-section-title">队员部署</div>
-                <div class="setting-group">
-                    <span>Roll:</span>
-                    <select id="rollCountSelect">
-                        <option value="3" selected>3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+            <!-- Unit Phase Controls -->
+            <div id="unit-controls" style="display:none; gap:15px; align-items:center; flex-wrap:wrap; width:100%;">
+                <div class="config-section">
+                    <div class="config-section-title">对战设置</div>
+                    <div class="setting-group">
+                        <span>人数:</span>
+                        <select id="playerCountSelect">
+                            <option value="1">1v1</option>
+                            <option value="2">2v2</option>
+                            <option value="3">3v3</option>
+                            <option value="4">4v4</option>
+                            <option value="5" selected>5v5</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="setting-group">
-                    <span>Pick:</span>
-                    <select id="pickCountSelect">
-                        <option value="1">1</option>
-                        <option value="2" selected>2</option>
-                        <option value="3">3</option>
-                    </select>
+                <div class="config-section">
+                    <div class="config-section-title">队员部署</div>
+                    <div class="setting-group">
+                        <span>Roll:</span>
+                        <select id="rollCountSelect">
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <span>Pick:</span>
+                        <select id="pickCountSelect">
+                            <option value="1">1</option>
+                            <option value="2" selected>2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
                 </div>
+
+                <div style="flex:1;"></div> 
+                <button class="btn btn-blue" id="btn-roll-units">🎲 部署队员</button>
+                <button class="btn btn-gold" id="btn-showdown" style="display:none;">⚔️ 最终决战</button>
             </div>
 
-            <button class="btn btn-blue" id="btn-roll-units">🎲 部署队员部队</button>
-            <button class="btn btn-gold" id="btn-showdown" style="display:none;">⚔️ 最终决战</button>
+            <!-- Fixed: Merged Status Display -->
+            <div id="integrated-status" class="status-display">等待数据加载...</div>
         </div>
+        
+        <!-- Old Status Bar Removed -->
 
-        <button class="btn btn-red" id="btn-restart" style="display:none; margin-left: 20px;">🔄 重新开始</button>
-    </div>
-    
-    <div id="status-bar">请先加载包含分类词条的 JSON 文件</div>
-
-    <div class="game-content-wrapper">
+        <!-- Phase 1: Global -->
         <div id="phase-global" class="game-phase">
             <div class="global-board">
                 <div class="global-team-panel a">
-                    <div class="team-header">Team Alpha (Global)</div>
+                    <div class="team-header" style="font-size:1.5rem; border-bottom:none;">Team Alpha (Global)</div>
+                    
                     <div class="global-section-title">
                         <span id="label-a-buff">全局 Buff</span>
                         <span class="req-badge" id="badge-a-buff">0/0</span>
@@ -537,7 +676,8 @@
                 </div>
 
                 <div class="global-team-panel b">
-                    <div class="team-header">Team Bravo (Global)</div>
+                    <div class="team-header" style="font-size:1.5rem; border-bottom:none;">Team Bravo (Global)</div>
+                    
                     <div class="global-section-title">
                         <span id="label-b-buff">全局 Buff</span>
                         <span class="req-badge" id="badge-b-buff">0/0</span>
@@ -553,19 +693,32 @@
             </div>
         </div>
 
+        <!-- Phase 2: Units -->
         <div id="phase-units" class="game-phase">
             <div class="arena">
                 <div class="team-col team-a" id="col-a">
-                    <div class="team-header">Team Alpha Units</div>
+                    <div class="team-header">Alpha Team</div>
                     <div id="roster-a"></div>
                 </div>
 
                 <div class="team-col team-b" id="col-b">
-                    <div class="team-header">Team Bravo Units</div>
+                    <div class="team-header">Bravo Team</div>
                     <div id="roster-b"></div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Side Search -->
+    <button class="side-search-button" id="sideSearchBtn">🔍</button>
+
+    <div class="search-panel" id="searchPanel" aria-hidden="true">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong style="color:var(--text-highlight);">词条搜索</strong>
+            <button class="btn btn-upload" id="closeSearch" style="padding:4px 10px; font-size:0.8rem;">关闭</button>
+        </div>
+        <input type="search" id="searchInput" placeholder="搜索关键词..." />
+        <div class="search-results-container" id="searchResults"></div>
     </div>
 
     <script>
@@ -574,7 +727,6 @@
         
         // --- State ---
         let RAW_DATA = {};
-        // POOLS now separated by category
         let POOLS = {
             buffs: [],
             debuffs: [],
@@ -591,30 +743,27 @@
         
         let PLAYER_DATA = { a: [], b: [] };
         let PICK_SETTINGS = { roll: 3, pick: 2 }; 
-        // --- token你拿去也没用，因为我已经限制死了
         const AI_API_KEY = "sk-PFqiLSA0iusyRDuYAe74CfFdD0D0457094176d6b2451Ee57";
         const AI_BASE_URL = "https://aihubmix.com/v1/chat/completions";
 
         // --- DOM Elements ---
         const dom = {
             fileInput: document.getElementById('fileInput'),
-            status: document.getElementById('status-bar'),
+            status: document.getElementById('integrated-status'), // UPDATED to new ID
             tooltip: document.getElementById('tooltip'),
+            metaInfo: document.getElementById('meta-info'),
             
-            // Phase Containers
             globalControls: document.getElementById('global-controls'),
             unitControls: document.getElementById('unit-controls'),
             phaseGlobal: document.getElementById('phase-global'),
             phaseUnits: document.getElementById('phase-units'),
             
-            // Buttons
             btnStartGlobal: document.getElementById('btn-start-global'),
             btnConfirmGlobal: document.getElementById('btn-confirm-global'),
             btnRollUnits: document.getElementById('btn-roll-units'),
             btnShowdown: document.getElementById('btn-showdown'),
             btnRestart: document.getElementById('btn-restart'),
             
-            // Inputs
             selBuffRoll: document.getElementById('buffRollSelect'),
             selBuffPick: document.getElementById('buffPickSelect'),
             selDebuffRoll: document.getElementById('debuffRollSelect'),
@@ -623,7 +772,6 @@
             selPick: document.getElementById('pickCountSelect'),
             selPlayerCount: document.getElementById('playerCountSelect'),
 
-            // Containers
             rosterA: document.getElementById('roster-a'),
             rosterB: document.getElementById('roster-b'),
             rowABuff: document.getElementById('row-a-buff'),
@@ -637,8 +785,6 @@
         };
 
         /* --- 1. Init --- */
-        
-        // 1.1 手动文件上传逻辑
         dom.fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -647,7 +793,7 @@
                 try {
                     RAW_DATA = JSON.parse(evt.target.result);
                     processData(RAW_DATA);
-                    dom.status.textContent = `数据加载成功: ${file.name}`;
+                    updateStatus(`数据加载成功: ${file.name}`);
                 } catch (err) {
                     console.error(err);
                     alert("JSON 格式错误");
@@ -656,9 +802,13 @@
             reader.readAsText(file);
         });
 
-        // 1.2 数据处理和初始化函数
+        function updateStatus(text, isAlert = false) {
+            dom.status.textContent = text;
+            if (isAlert) dom.status.classList.add('alert');
+            else dom.status.classList.remove('alert');
+        }
+
         function processData(data) {
-            // 兼容旧版本：global_debuffs 或 team_debuffs
             const debuffField = data.global_debuffs || data.team_debuffs;
             
             if (!data.global_buffs || !debuffField) {
@@ -666,14 +816,12 @@
                 return;
             }
 
-            // Process Global Pools
             POOLS.buffs = data.global_buffs.map(c => ({...c, type: 'buff', uid: Math.random(), author: c.author || '未知'}));
             POOLS.debuffs = debuffField.map(c => ({...c, type: 'debuff', uid: Math.random(), author: c.author || '未知'}));
 
-            // Process Unit Pools by Category
             let totalUnits = 0;
             UNIT_CATEGORIES.forEach(cat => {
-                POOLS.byCategory[cat] = []; // Clear
+                POOLS.byCategory[cat] = [];
                 if (data[cat] && Array.isArray(data[cat])) {
                     data[cat].forEach(card => {
                         POOLS.byCategory[cat].push({
@@ -689,56 +837,40 @@
             });
 
             if (totalUnits < 20) {
-                dom.status.textContent = `警告：部队池过小 (${totalUnits} 张)`;
+                updateStatus(`警告：部队池过小 (${totalUnits} 张)`, true);
             } else {
-                dom.status.textContent = `数据加载完毕! Buff:${POOLS.buffs.length}, Debuff:${POOLS.debuffs.length}, Units:${totalUnits}`;
+                updateStatus(`数据就绪! Buff:${POOLS.buffs.length}, Units:${totalUnits}`);
             }
 
-            // 新增：显示 metadata 信息
             if (data.metadata) {
                 let metaStr = '';
                 if (data.metadata.version) metaStr += `JSON v${data.metadata.version}`;
                 if (data.metadata.last_updated) {
-                    if (metaStr) metaStr += ' , ';
+                    if (metaStr) metaStr += ' | ';
                     metaStr += `${data.metadata.last_updated}`;
                 }
-                if (metaStr) {
-                    const metaEl = document.getElementById('meta-info');
-                    metaEl.textContent = metaStr;
-                    metaEl.style.display = 'block';
-                }
+                dom.metaInfo.textContent = metaStr;
+            } else {
+                dom.metaInfo.textContent = "Data Version: Unknown";
             }
 
-            // dom.fileInput.parentElement.style.display = 'none'; // 成功加载后在 autoLoad 中统一处理
             dom.globalControls.style.display = 'flex';
-            dom.btnRestart.style.display = 'block'; // Show Restart button
+            dom.btnRestart.style.display = 'block';
         }
         
-        // 1.3 新增：尝试从当前目录自动加载 JSON
         async function attemptAutoLoad(filename = 'deck_config.json') {
-            dom.status.textContent = `尝试自动加载 ${filename}...`;
+            updateStatus(`加载中... ${filename}`);
             try {
-                // 使用 fetch 尝试从运行该 HTML 文件的位置加载 JSON
                 const response = await fetch(filename);
-                
-                // 检查 HTTP 状态码，如果找不到文件 (e.g., 404)
-                if (!response.ok) {
-                    throw new Error(`文件 ${filename} 未找到或加载失败 (状态码: ${response.status})`);
-                }
-                
+                if (!response.ok) throw new Error(`Status: ${response.status}`);
                 const data = await response.json();
                 RAW_DATA = data;
                 processData(RAW_DATA);
-                
-                // 成功加载后，按钮保持可见
-                // dom.fileInput.parentElement.style.display = 'none'; // 注释掉此行
-                dom.status.textContent = `自动加载成功: ${filename}`;
-
+                updateStatus(`配置加载成功: ${filename}`);
             } catch (error) {
                 console.warn(error.message);
-                // 自动加载失败，显示上传按钮，让用户手动操作
                 dom.fileInput.parentElement.style.display = 'flex'; 
-                dom.status.textContent = `未能自动加载 ${filename}。请手动点击 📂 加载 JSON`;
+                updateStatus(`请手动加载 JSON 文件`, true);
             }
         }
 
@@ -756,7 +888,6 @@
 
             GLOBAL_CONFIG = { buff: {roll: br, pick: bp}, debuff: {roll: dr, pick: dp} };
 
-            // 重置已选数据 (Allow Re-roll)
             GLOBAL_SELECTIONS = {
                 a: { buffs: new Set(), debuffs: new Set() },
                 b: { buffs: new Set(), debuffs: new Set() }
@@ -767,14 +898,13 @@
                 document.getElementById(`label-${t}-debuff`).textContent = `本队 Debuff (${dr}选${dp})`;
             });
 
-            // 按钮不再消失，变成“重新抽取”
-            dom.btnStartGlobal.textContent = "🔄 重新抽取全局";
+            dom.btnStartGlobal.textContent = "🔄 重新抽取";
             dom.phaseGlobal.classList.add('active');
             
             renderGlobalSection('a');
             renderGlobalSection('b');
             
-            dom.status.textContent = "阶段一：请点击卡牌进行选择（可点击上方按钮重Roll）";
+            updateStatus("阶段一：点击卡牌进行选择");
             updateGlobalStatus();
         });
 
@@ -792,7 +922,6 @@
                 const el = createCardElement(card);
                 el.addEventListener('click', () => toggleGlobalSelection(el, card, team, type));
                 container.appendChild(el);
-                setTimeout(() => el.classList.add('dealt'), index * 80);
             });
         }
 
@@ -805,6 +934,7 @@
                 el.classList.remove('selected');
             } else {
                 if (set.size >= limit) {
+                    // Shake animation
                     el.animate([{ transform: 'translateX(-4px)' }, { transform: 'translateX(4px)' }, { transform: 'translateX(0)' }], { duration: 200 });
                     return;
                 }
@@ -830,11 +960,10 @@
 
             if (aBuff===maxBuff && aDebuff===maxDebuff && bBuff===maxBuff && bDebuff===maxDebuff) {
                 dom.btnConfirmGlobal.style.display = 'flex';
-                dom.status.textContent = "全局选择完成，请确认进入下一阶段";
-                dom.status.style.color = 'var(--gold)';
+                updateStatus("选择完成，请点击确认", true);
             } else {
                 dom.btnConfirmGlobal.style.display = 'none';
-                dom.status.style.color = '#c5c6c7';
+                updateStatus("阶段一：点击卡牌进行选择");
             }
         }
 
@@ -846,15 +975,18 @@
 
         dom.btnConfirmGlobal.addEventListener('click', () => {
             dom.btnConfirmGlobal.style.display = 'none';
-            dom.globalControls.style.display = 'none'; // Hide Global controls to simplify bar
+            dom.globalControls.style.display = 'none'; 
             dom.unitControls.style.display = 'flex';
             dom.phaseUnits.classList.add('active');
-            dom.status.textContent = "阶段二：配置对战人数，生成部队";
-            dom.status.style.color = '#66fcf1';
-            setTimeout(() => dom.phaseUnits.scrollIntoView({behavior: 'smooth', block: 'start'}), 100);
+            updateStatus("阶段二：配置人数，生成部队");
+            
+            // Smooth scroll to units
+            setTimeout(() => {
+                dom.phaseUnits.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }, 100);
         });
 
-        /* --- 3. Unit Phase (FIXED LOGIC) --- */
+        /* --- 3. Unit Phase --- */
         dom.btnRollUnits.addEventListener('click', () => {
             const rollCount = parseInt(dom.selRoll.value);
             const pickCount = parseInt(dom.selPick.value);
@@ -889,7 +1021,7 @@
                         if (currentDeck[cat].length > 0) {
                             hand.push(currentDeck[cat].pop());
                         } else {
-                            errorMsg = `错误：${cat} 栏目卡牌不足！请补充 JSON 数据。`;
+                            errorMsg = `错误：${cat} 栏目卡牌不足！`;
                         }
                     });
 
@@ -907,8 +1039,8 @@
             }
 
             renderPlayerRosters();
-            dom.btnRollUnits.textContent = "🔄 重新 Roll 点";
-            dom.status.textContent = "请各队员点击卡牌进行选择";
+            dom.btnRollUnits.textContent = "🔄 重新生成";
+            updateStatus("请各队员点击卡牌进行选择");
             checkUnitReadiness();
         });
 
@@ -937,10 +1069,6 @@
                         cardEl.dataset.uid = card.uid;
                         cardEl.addEventListener('click', () => handleUnitPick(team, idx, card.uid, cardEl));
                         handDiv.appendChild(cardEl);
-                        
-                        setTimeout(() => {
-                            cardEl.classList.add('dealt');
-                        }, (idx * 50) + (cIdx * 50)); 
                     });
 
                     panel.appendChild(meta);
@@ -959,11 +1087,7 @@
                 el.classList.remove('selected');
             } else {
                 if (player.picks.size >= PICK_SETTINGS.pick) {
-                    el.animate([
-                         { transform: 'translateX(-4px)' },
-                         { transform: 'translateX(4px)' },
-                         { transform: 'translateX(0)' }
-                    ], { duration: 150 });
+                     el.animate([{ transform: 'translateX(-4px)' }, { transform: 'translateX(4px)' }, { transform: 'translateX(0)' }], { duration: 150 });
                     return;
                 }
                 player.picks.add(uid);
@@ -987,12 +1111,10 @@
 
             if (!pending && PLAYER_DATA.a.length > 0) {
                 dom.btnShowdown.style.display = 'flex';
-                dom.status.textContent = "全员就绪！点击进入最终决战";
-                dom.status.style.color = 'var(--gold)';
+                updateStatus("全员就绪！点击进入最终决战", true);
             } else {
                 dom.btnShowdown.style.display = 'none';
-                dom.status.textContent = "等待队员选择...";
-                dom.status.style.color = '#c5c6c7';
+                updateStatus("等待队员选择...");
             }
         }
 
@@ -1000,42 +1122,36 @@
         dom.btnShowdown.addEventListener('click', () => {
             document.body.classList.add('mode-showdown');
             dom.unitControls.style.display = 'none';
-            dom.status.textContent = "⚔️ BATTLE PHASE ⚔️";
+            updateStatus("⚔️ BATTLE PHASE ⚔️", true);
             triggerAIGeneration();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         /* --- 5. Restart --- */
         dom.btnRestart.addEventListener('click', () => {
-            if(!confirm("确定要重新开始吗？当前进度将丢失（JSON文件不需要重新上传）。")) return;
+            if(!confirm("确定要重新开始吗？当前进度将丢失。")) return;
             
-            // Reset UI
             document.body.classList.remove('mode-showdown');
             dom.phaseGlobal.classList.remove('active');
             dom.phaseUnits.classList.remove('active');
             
-            // Reset Controls
             dom.globalControls.style.display = 'flex';
             dom.unitControls.style.display = 'none';
             dom.btnConfirmGlobal.style.display = 'none';
             dom.btnShowdown.style.display = 'none';
-            dom.btnStartGlobal.textContent = "1️⃣ 抽取全局词条";
+            dom.btnStartGlobal.textContent = "1️⃣ 抽取全局";
 
-            // Clear Containers
             dom.rowABuff.innerHTML = ''; dom.rowADebuff.innerHTML = '';
             dom.rowBBuff.innerHTML = ''; dom.rowBDebuff.innerHTML = '';
             dom.rosterA.innerHTML = ''; dom.rosterB.innerHTML = '';
 
-            // Reset Badges
             updateBadge(dom.badgeABuff, 0, 0); updateBadge(dom.badgeADebuff, 0, 0);
             updateBadge(dom.badgeBBuff, 0, 0); updateBadge(dom.badgeBDebuff, 0, 0);
 
-            // Reset State Variables
             GLOBAL_SELECTIONS = { a: { buffs: new Set(), debuffs: new Set() }, b: { buffs: new Set(), debuffs: new Set() } };
             PLAYER_DATA = { a: [], b: [] };
             
-            dom.status.textContent = "已重置。阶段一：请抽取全局词条";
-            dom.status.style.color = '#c5c6c7';
+            updateStatus("已重置。请抽取全局词条");
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
@@ -1071,13 +1187,15 @@
             moveTooltip(e);
         }
         function moveTooltip(e) {
-            const x = e.clientX + 20;
-            const y = e.clientY + 20;
+            const x = e.clientX + 15;
+            const y = e.clientY + 15;
             const rect = dom.tooltip.getBoundingClientRect();
             let left = x;
             let top = y;
-            if (x + rect.width > window.innerWidth) left = e.clientX - rect.width - 20;
-            if (y + rect.height > window.innerHeight) top = e.clientY - rect.height - 20;
+            // Prevent tooltip from going off-screen
+            if (left + rect.width > window.innerWidth) left = window.innerWidth - rect.width - 20;
+            if (top + rect.height > window.innerHeight) top = e.clientY - rect.height - 20;
+            
             dom.tooltip.style.left = left + 'px';
             dom.tooltip.style.top = top + 'px';
         }
@@ -1120,16 +1238,90 @@
             }
         }
         
-        // -------------------------------------------------------------
-        // NEW: 页面加载完成后，尝试自动加载 deck_config.json
-        // -------------------------------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
              attemptAutoLoad('deck_config.json');
         });
-        
+
+        /* --- Search & Feedback Logic --- */
+        const btnFeedback = document.getElementById('btn-feedback');
+        if (btnFeedback) {
+            btnFeedback.addEventListener('click', () => {
+                const subject = encodeURIComponent('【卡组词条反馈】');
+                const body = encodeURIComponent('1) 词条名：\n2) 问题描述：\n3) 建议：');
+                location.href = `mailto:zawinzala@outlook.com?subject=${subject}&body=${body}`;
+            });
+        }
+
+        const sideSearchBtn = document.getElementById('sideSearchBtn');
+        const searchPanel = document.getElementById('searchPanel');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const closeSearch = document.getElementById('closeSearch');
+
+        function toggleSearchPanel(show) {
+            if (show === undefined) show = !searchPanel.classList.contains('active');
+            searchPanel.classList.toggle('active', show);
+            searchPanel.setAttribute('aria-hidden', String(!show));
+            if (show) { searchInput.focus(); searchInput.select(); } 
+            else { searchInput.value = ''; searchResults.innerHTML = ''; }
+        }
+        sideSearchBtn.addEventListener('click', () => toggleSearchPanel(true));
+        closeSearch.addEventListener('click', () => toggleSearchPanel(false));
+
+        function debounce(fn, wait = 180) {
+            let t;
+            return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+        }
+
+        // Updated for Requirement 2: Show Author in Search Results
+        function performSearch(q) {
+            searchResults.innerHTML = '';
+            if (!q || !POOLS) {
+                searchResults.innerHTML = '<div style="color:#666;text-align:center;padding:10px;">请输入...</div>';
+                return;
+            }
+            const qq = q.trim().toLowerCase();
+            const poolList = [
+                ...(POOLS.buffs || []),
+                ...(POOLS.debuffs || []),
+                ...UNIT_CATEGORIES.flatMap(cat => (POOLS.byCategory[cat] || []))
+            ];
+
+            const found = poolList.filter(item => {
+                const t = (item.title || '').toLowerCase();
+                const c = (item.content || '').toLowerCase();
+                const a = (item.author || '').toLowerCase();
+                return t.includes(qq) || c.includes(qq) || a.includes(qq);
+            });
+
+            if (found.length === 0) {
+                searchResults.innerHTML = '<div style="color:#666;text-align:center;">无结果</div>';
+                return;
+            }
+
+            found.slice(0, 50).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'search-result';
+                div.innerHTML = `
+                    <div style="font-weight:700; color:#e0e0e0;">${item.title}</div>
+                    <div style="font-size:0.75rem; color:#888;">${item.content}</div>
+                    <div style="font-size:0.7rem; color:var(--gold); text-align:right; margin-top:2px;">© ${item.author || '未知'}</div>
+                `;
+                div.addEventListener('click', async () => {
+                     try {
+                        await navigator.clipboard.writeText(`${item.title}\n${item.content}`);
+                        div.style.background = 'var(--text-highlight)';
+                        div.style.color = '#000';
+                        setTimeout(() => { div.style.background = ''; div.style.color = ''; }, 300);
+                     } catch(e){}
+                });
+                searchResults.appendChild(div);
+            });
+        }
+
+        searchInput.addEventListener('input', debounce((e) => performSearch(e.target.value), 160));
+        searchInput.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleSearchPanel(false); });
+
     </script>
 </body>
-
 </html>
-
-
