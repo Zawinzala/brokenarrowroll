@@ -1246,8 +1246,8 @@
         const btnFeedback = document.getElementById('btn-feedback');
         if (btnFeedback) {
             btnFeedback.addEventListener('click', () => {
-                const subject = encodeURIComponent('【卡组词条反馈】');
-                const body = encodeURIComponent('1) 词条名：\n2) 问题描述：\n3) 建议：');
+                const subject = encodeURIComponent('【卡组词条反馈/添加】');
+                const body = encodeURIComponent('1) 词条名：\n2) 描述：\n3) 反馈人/作者：');
                 location.href = `mailto:zawinzala@outlook.com?subject=${subject}&body=${body}`;
             });
         }
@@ -1325,3 +1325,4 @@
     </script>
 </body>
 </html>
+
