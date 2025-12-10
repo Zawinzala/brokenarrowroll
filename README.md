@@ -7,9 +7,8 @@
 工具已部署至 GitHub Pages，可直接在线游玩：
 [https://zawinzala.github.io/brokenarrowroll/](https://zawinzala.github.io/brokenarrowroll/)
 
-## 贡献指南
-
-我们欢迎对项目的贡献！如果您想要改动，请遵循以下原则：
+### 更新日志
+. 2025年12月10日 添加了约40个词条 修改了约10个词条
 
 ### 词条修改原则
 
@@ -30,7 +29,3 @@
 ## 问题反馈
 
 如果您遇到任何问题或有改进建议，请在 GitHub 仓库中提交 Issue。
-
----
-
-**祝您游戏愉快！**
